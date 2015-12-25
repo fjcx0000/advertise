@@ -2,5 +2,3 @@
 2015-11-18T06:10:42+01:00 INFO (6): Advertisement Entity persisted successfully, email=[fjcx0000@gmail.com] product=[Luna 168 Single Mattress]
 2015-11-18T07:39:03+01:00 INFO (6): Advertisement Entity persisted successfully, email=[fjcx0000@gmail.com] product=[Luna 168 Single Mattress] address=[448 Princes Hwy, Rockdale NSW 2216, Australia]
 2015-11-18T08:00:38+01:00 INFO (6): Advertise\Controller\AdvertiseController: Advertisement Entity persisted successfully, email=[fjcx0000@gmail.com] product=[Chippen Single Bed] address=[511-513 Pittwater Rd, Brookvale NSW 2100, Australia]
-
-Just for git ingore test
