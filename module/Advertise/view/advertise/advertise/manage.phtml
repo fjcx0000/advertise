@@ -1,0 +1,100 @@
+
+<?php
+$this->headscript()->appendFile(
+    'http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places',
+    'text/javascript',
+    array()
+);
+?>
+
+<?php 
+$title = 'Gumtree Ads Management';
+$this->headtitle($title);
+?>
+
+
+<div class="row">
+<div class="col-md-6">
+<?php 
+$form = $this->form;
+$form->setAttribute('action', $this->url('advertise/manage'));
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<div class="form-group">
+    <?php 
+    $element = $form->get('email');
+    echo $this->formLabel()->openTag();
+    echo $this->formlabel($element);
+    echo $this->formlabel()->closeTag();
+    echo $this->formemail($element);
+    echo $this->formelementerrors($element);
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('productId');
+    echo $this->formLabel()->openTag();
+    echo $this->formlabel($element);
+    echo $this->formlabel()->closeTag();
+    echo $this->formSelect($element);
+    echo $this->formelementerrors($element);
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('postAddress');
+    echo $this->formLabel()->openTag();
+    echo $this->formlabel($element);
+    echo $this->formlabel()->closeTag();
+    echo $this->formtext($element);
+    echo $this->formelementerrors($element);
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('postDate');
+    echo $this->formLabel()->openTag();
+    echo $this->formlabel($element);
+    echo $this->formlabel()->closeTag();
+    echo $this->formdate($element);
+    echo $this->formelementerrors($element);
+    ?>
+</div>
+
+<?php echo $this->formhidden($form->get('adsId'));?>
+<?php echo $this->formhidden($form->get('addrLatitude'));?>
+<?php echo $this->formhidden($form->get('addrLongitude'));?>
+<?php echo $this->formsubmit($form->get('submit'));?>&nbsp;
+<a href="<?php print $this->url('advertise');?>" class="btn"
+    title="<?php print $this->translate('Cancel');?>">
+    <?php print $this->translate('Cancel');?></a>
+    
+<?php echo $this->form()->closeTag();?>
+</div>
+</div>
+
+<?php $this->inlineScript()->captureStart() ?>
+ google.maps.event.addDomListener(window, 'load', function () {
+            var places = new google.maps.places.Autocomplete(document.getElementById('postAddress'));
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var location = place.geometry.location;
+                var GeoCode = ((location).toString().replace(/[()]/g, '')).split(",",2);  
+                 var latitude = parseFloat(GeoCode[0]);            
+                 var longitude = parseFloat(GeoCode[1]);
+               /*
+                var mesg = "Address: " + address;
+                mesg += "\nLatitude: " + latitude;
+                mesg += "\nLongitude: " + longitude; 
+                alert(mesg);
+                */
+                
+                document.getElementById('postAddress').value = address;
+                document.getElementById('addrLatitude').value = latitude;
+                document.getElementById('addrLongitude').value = longitude;
+            });
+        });
+<?php $this->inlineScript()->captureEnd() ?>

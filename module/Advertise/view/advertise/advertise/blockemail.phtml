@@ -1,0 +1,48 @@
+<?php 
+$title = 'Gumtree Blocked Email';
+$this->headtitle($title);
+?>
+
+
+<div class="row">
+<div class="col-md-6">
+<?php 
+$form = $this->form;
+$form->setAttribute('action', $this->url('advertise/blockemail'));
+$form->setAttribute("onsubmit","return confirmDel()");
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<div class="form-group">
+    <?php 
+    $element = $form->get('email');
+    echo $this->formLabel()->openTag();
+    echo $this->formlabel($element);
+    echo $this->formlabel()->closeTag();
+    echo $this->formemail($element);
+    echo $this->formelementerrors($element);
+    ?>
+</div>
+
+<?php echo $this->formsubmit($form->get('submit'));?>&nbsp;
+<a href="<?php print $this->url('advertise');?>" class="btn"
+    title="<?php print $this->translate('Cancel');?>">
+    <?php print $this->translate('Cancel');?></a>
+    
+<?php echo $this->form()->closeTag();?>
+</div>
+</div>
+
+<?php $this->inlineScript()->captureStart() ?>
+function confirmDel()
+{
+var mesg = "Confirm block " + document.getElementById("emailAddr").value + " ?";
+
+if (window.confirm(mesg))
+    {
+    return true;
+    }
+    return false;
+}
+<?php $this->inlineScript()->captureEnd() ?>

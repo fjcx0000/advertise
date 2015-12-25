@@ -1,0 +1,51 @@
+<?php 
+$title = 'Gumtree Ads List';
+$this->headtitle($title);
+$paginator = $this->paginator;
+$page = $this->page;
+$order_by = $this->order_by;
+$order = $this->order;
+$ads = $this->ads;
+$url_order = 'ASC';
+if ($order_by == 'email')
+    $url_order = ($order == 'ASC' ? 'DESC' : 'ASC');
+elseif ($order_by == 'productName')
+    $url_order = ($order == 'ASC' ? 'DESC' : 'ASC');
+
+?>
+
+<table class="table table-bordered table-hover">
+  <tr>
+    <th>
+        <a href="<?php echo $this->url('advertise/default', array('order_by' => 'email', 'order' => $url_order)); ?>">
+        Email <?php if ($order_by == 'email'): ?><span class="glyphicon glyphicon-arrow-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></span><?php endif; ?></a>
+    </th>
+    <th>
+        <a href="<?php echo $this->url('advertise/default', array('order_by' => 'productName', 'order' => $url_order)); ?>">
+        Product Name <?php if ($order_by == 'productName'): ?><span class="glyphicon glyphicon-arrow-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></span><?php endif; ?></a>
+    </th>
+    <th>
+        Post Address
+    </th>
+    <th>
+        Post Date
+    </th>
+  </tr>
+  <?php
+   //foreach ($ads as $advertise) :
+   foreach ($paginator as $advertise) : 
+  ?>
+  <tr>
+    <td><?php echo $advertise->email;?></td>
+    <td><?php echo $advertise->productName;?></td>
+    <td><?php echo $advertise->postAddress;?></td>
+    <td><?php echo $advertise->postDate->format('Y-m-d');?></td>
+  </tr>
+  <?php endforeach;?>
+</table>
+<?php 
+echo $this->paginationControl(
+    $paginator, 'Sliding', 'paginator-slide', array('order_by' => $order_by, 'order' => $order)
+);
+?>
+

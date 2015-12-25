@@ -1,0 +1,13 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('advertise/login', array(
+    'action' => 'authenticate'
+)));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formcollection($form);
+echo $this->form()->closeTag($form);
+
+echo $this->error;
+?>

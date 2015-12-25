@@ -1,0 +1,202 @@
+<?php
+//$this->headLink()->appendStylesheet($this->basepath().'/css/validation/default.css');
+$this->headlink()->appendStylesheet($this->basepath().'/css/validation/formValidation.css');
+$this->headscript()->appendFile($this->basepath() . '/js/validation/formValidation.js','text/javascript', array());
+$this->headscript()->appendFile($this->basepath() . '/js/validation/framework/bootstrap.js','text/javascript', array());
+
+$title = 'User Registry';
+$this->headtitle($title);
+?>
+
+<?php 
+$form = $this->form;
+$form->setAttribute('action', $this->url('advertise/register'));
+$form->setAttributes(array(
+    'id' => 'registryForm',
+    'class' => 'form-horizontal',
+));
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+<div class="form-group">
+    <?php 
+    $element = $form->get('username');
+    $element->setLabelAttributes(array(
+        'class' => 'col-sm-3 control-label'
+    ));
+    
+   // echo $this->formlabel()->openTag();
+   // echo '<label class="col-sm-3 control-label">';
+    echo $this->formlabel($element);
+   // echo $this->formlabel()->closeTag();
+  echo '<div class="col-sm-6">';
+    echo $this->formtext($element);
+    echo $this->formelementerrors($element);
+  echo '</div>';
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('email');
+    $element->setLabelAttributes(array(
+        'class' => 'col-sm-3 control-label'
+    ));
+    //echo $this->formlabel()->openTag();
+    echo $this->formlabel($element);
+    //echo $this->formlabel()->closeTag();
+  echo '<div class="col-sm-6">';
+    echo $this->formemail($element);
+    echo $this->formelementerrors($element);
+  echo '</div>';
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('password');
+    $element->setLabelAttributes(array(
+        'class' => 'col-sm-3 control-label'
+    ));
+    //echo $this->formlabel()->openTag();
+    echo $this->formlabel($element);
+    //echo $this->formlabel()->closeTag();
+    echo '<div class="col-sm-6">';
+    echo $this->formpassword($element);
+    echo $this->formelementerrors($element);
+    echo '</div>';
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('repeatPassword');
+    $element->setLabelAttributes(array(
+        'class' => 'col-sm-3 control-label'
+    ));
+    //echo $this->formlabel()->openTag();
+    echo $this->formlabel($element);
+    //echo $this->formlabel()->closeTag();
+    echo '<div class="col-sm-6">';
+    echo $this->formpassword($element);
+    echo $this->formelementerrors($element);
+    echo '</div>';
+    ?>
+</div>
+<div class="form-group">
+    <?php 
+    $element = $form->get('captcha');
+    $element->setLabelAttributes(array(
+        'class' => 'col-sm-3 control-label'
+    ));
+    //echo $this->formlabel()->openTag();
+    echo $this->formlabel($element);
+    //echo $this->formlabel()->closeTag();
+    echo '<div class="col-sm-4">';
+    echo $this->formCaptcha($element);
+    echo $this->formelementerrors($element);
+    echo '</div>';
+    ?>
+    <div class="col-sm-2">
+        <button type="button" class="btn btn-warn" id="refreshcaptcha">Get New Code</button>
+    </div>
+</div>
+<div class="form-group">
+	<div class="col-sm-9 col-sm-offset-3">
+<?php 
+//$form->get('submit')->setAttribute('id', 'submit1');
+//echo $this->formSubmit($form->get('submit')); 
+?>
+<button type="submit" class="btn btn-primary" name="signup" value="Sign up">Submit</button>
+&nbsp;&nbsp;
+<?php 
+echo $this->formreset($form->get('reset'));
+?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag();?>
+
+
+<?php $this->inlinescript()->captureStart()?>
+$(document).ready(function() {
+	    
+	    $('#registryForm').formValidation({
+	        message: 'This value is not valid',
+	        icon: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	            username: {
+	                message: 'The username is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Username is required'
+	                    },
+	                    stringLength: {
+	                        min: 6,
+	                        max: 30,
+	                        message: 'username is limited between 6 to 30 charactors'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_\.]+$/,
+	                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+	                    },
+	                    remote: {
+	                       type: 'POST',
+	                       url: '/GumtreeAdsManagement/public/advertise/validate',
+	                       message: 'Username has been registered already',
+	                       delay: 1000
+	                    }
+	                }
+	            },
+	            email: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Email is required'
+	                    },
+	                    emailAddress: {
+	                        message: 'Email is invalid'
+	                    }
+	                }
+	            },
+	            password: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Password cannot be null'
+	                    },
+	                    different: {
+	                        field: 'username',
+	                        message: 'password cannot be same with username'
+	                    }
+	                }
+	            },
+	            repeatPassword: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Password cannot be null'
+	                    },
+	                    identical: {
+	                        field: 'password',
+	                        message: '2 times passwords are not same'
+	                    }
+	                }
+	            },
+	        }
+	    });
+	});
+	
+	$(document).ready(function() {
+	   $('#refreshcaptcha').click(function() {
+	  
+	       $.ajax({
+	           url: '/GumtreeAdsManagement/public/advertise/captcha/'+$("input[name='captcha[id]']").val(),
+	           success: function(data) {
+	              // $("input[name='captcha[id]']").siblings('img').attr('src',data);
+	               $("input[name='captcha[id]']").siblings('img').attr('src','/GumtreeAdsManagement/public/advertise/captcha/'+$("input[name='captcha[id]']").val()+'.png');
+	    
+	           }
+	       });
+    
+	    });
+	});
+	
+<?php $this->inlinescript()->captureEnd()?>
