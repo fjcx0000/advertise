@@ -73,8 +73,6 @@ class Module implements AutoloaderProviderInterface
         $controller = $matches->getParam('controller');
         if (false === strpos($controller, __NAMESPACE__)) {
             //not a controller from this module
-            // add for git commit
-            echo "test for git submit";
             return ;
         }
         //set the layout template
