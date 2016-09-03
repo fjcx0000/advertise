@@ -57,8 +57,9 @@ class Module implements AutoloaderProviderInterface
         
         //Register log event
         $log = $this->getLogger($e);
-        $events = StaticEventManager::getInstance();
-        $events->attach('*', 'log', function($event) use ($log){
+        //$events = StaticEventManager::getInstance();
+        $sharedEventManager = $eventManager->getSharedManager();
+        $sharedEventManager->attach('Advertise\Controller\AdvertiseController', 'log', function($event) use ($log){
             $target = get_class($event->getTarget());
             $message = $event->getParam('message', 'No message provided');
             $priority = (int) $event->getParam('priority', \Zend\Log\Logger::INFO);

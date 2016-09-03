@@ -208,6 +208,7 @@ class AdvertiseController extends AbstractActionController
                     'priority' => \Zend\Log\Logger::INFO,
                     'message' => $message,
                 ));
+                echo "Log events triggered </br>";
                 return $this->redirect()->toRoute(self::DEFAULT_ROUTE,array());
             }
         }
